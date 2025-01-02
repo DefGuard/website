@@ -33,7 +33,12 @@ import TrustedBy from "./TrustedBy.astro";
         >guarantees Zero-TRUST</strong
       >
     </p>
-    <Image src={headerImage} alt="header diagram image" loading={"eager"} />
+    <Image
+      src={headerImage}
+      alt="header diagram image"
+      loading={"eager"}
+      layout="responsive"
+    />
   </ElevatedCard>
   <TrustedBy />
 </HomeSection>

@@ -1,8 +1,12 @@
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
+const defaultPattern = "**/*.{md,mdx}";
+
+const contentPath = (value: string) => "./src/content/" + value;
+
 const coreFeatures = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/core-features" }),
+  loader: glob({ pattern: defaultPattern, base: contentPath("core-features") }),
   schema: z.object({
     title: z.string(),
     order: z.number(),
@@ -10,7 +14,7 @@ const coreFeatures = defineCollection({
 });
 
 const clientFeatures = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/client-features" }),
+  loader: glob({ pattern: defaultPattern, base: contentPath("client-features") }),
   schema: z.object({
     title: z.string(),
     order: z.number(),
@@ -37,15 +41,15 @@ const roadmapSchema = z.object({
 
 export type Roadmap = z.infer<typeof roadmapSchema>;
 
-const roadmap = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/roadmap" }),
+const roadmapCollection = defineCollection({
+  loader: glob({ pattern: defaultPattern, base: contentPath("roadmap") }),
   schema: roadmapSchema,
 });
 
 export type PricingSchema = z.infer<typeof pricingSchema>;
 
-const pricing = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/pricing" }),
+const pricingCollection = defineCollection({
+  loader: glob({ pattern: defaultPattern, base: contentPath("pricing") }),
   schema: pricingSchema,
 });
 
@@ -56,7 +60,7 @@ const openvpnFeaturesSchema = z.object({
 
 const openvpnFeaturesCollection = defineCollection({
   schema: openvpnFeaturesSchema,
-  loader: glob({ pattern: "**/*.md", base: "./src/content/openvpn-features" }),
+  loader: glob({ pattern: defaultPattern, base: contentPath("openvpn-features") }),
 });
 
 const faqSchema = z.object({
@@ -65,7 +69,7 @@ const faqSchema = z.object({
 });
 
 const faqCollection = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/faq" }),
+  loader: glob({ pattern: defaultPattern, base: contentPath("faq") }),
   schema: faqSchema,
 });
 
@@ -74,6 +78,6 @@ export const collections = {
   "core-features": coreFeatures,
   "openvpn-features": openvpnFeaturesCollection,
   faq: faqCollection,
-  pricing: pricing,
-  roadmap,
+  pricing: pricingCollection,
+  roadmap: roadmapCollection,
 };

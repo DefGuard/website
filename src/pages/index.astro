@@ -3,6 +3,7 @@ import Navigation from "../components/base/Navigation.astro";
 import BuiltBy from "../components/BuiltBy.astro";
 import HomeSection from "../components/home/HomeSection.astro";
 import ProductLayout from "../layouts/ProductLayout.astro";
+import type { ImportGlob } from "../types";
 import Testimonials from "./_home/components/client-side/Testimonials/Testimonials";
 import type { TestimonialData } from "./_home/components/client-side/Testimonials/type";
 import { testimonialSchema } from "./_home/components/client-side/Testimonials/type";
@@ -13,7 +14,11 @@ import HomeScrollSection1 from "./_home/scroll-sections/section-1/HomeScrollSect
 import HomeScrollSection2 from "./_home/scroll-sections/section-2/HomeScrollSection2";
 import HomeScrollSection3 from "./_home/scroll-sections/section-3/HomeScrollSection3";
 
-const testimonialsImportData = await Astro.glob("../data/home/testimonials/**/*.md");
+const testimonialsImportData = Object.values(
+  import.meta.glob("../data/home/testimonials/**/*.md", {
+    eager: true,
+  }),
+) as ImportGlob<Omit<TestimonialData, "markdownRaw">>;
 
 const testimonialsData: Array<TestimonialData> = testimonialsImportData.map((val) => {
   const toValidate = { ...val.frontmatter, markdownRaw: val.rawContent() };
