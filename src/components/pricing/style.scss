@@ -5,31 +5,13 @@
   align-items: center;
   justify-content: flex-start;
 
-  #pricing-toggle {
-    display: flex;
-    flex-flow: row;
-    row-gap: 8px;
-    box-sizing: border-box;
-    border: 1px solid var(--text-body-primary);
-    border-radius: 50px;
-    min-height: 38px;
-    margin-bottom: 50px;
+  & > .plan-notice {
+    @include typography(menu);
+    padding-bottom: 40px;
+  }
 
-    & > button {
-      box-sizing: border-box;
-      background-color: transparent;
-      border: none;
-      padding: 4px 20px;
-      @include typography(paragraph);
-      color: var(--text-body-primary);
-      cursor: pointer;
-
-      &.active {
-        color: var(--text-button-secondary);
-        background-color: var(--surface-main-primary);
-        border-radius: 50px;
-      }
-    }
+  & > .pricing-toggle {
+    margin-bottom: 40px;
   }
 
   & > .plans {
@@ -103,6 +85,10 @@
             padding-bottom: 45px;
           }
 
+          &.free {
+            padding-bottom: 80px;
+          }
+
           & > .suffix {
             @include typography(footer);
             color: var(--text-body-primary);
@@ -115,29 +101,47 @@
             color: var(--text-body-primary);
           }
 
-          .monthly {
-            color: var(--surface-main-primary);
+          .annual {
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+            justify-content: center;
+            column-gap: 4.5px;
 
-            &.discount {
+            & > :nth-child(1) {
               @include typography(footer-section);
-              font-weight: 700;
               text-decoration: line-through;
             }
 
-            &.annual {
-              color: var(--text-body-primary);
+            & > :nth-child(2) {
+              font-family: Poppins;
+              font-size: 30px;
+              font-style: normal;
+              font-weight: 600;
+              line-height: normal;
+              color: var(--surface-main-primary);
             }
           }
 
-          .annually,
           .monthly {
-            font-family: "Poppins";
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+            justify-content: center;
+            column-gap: 8px;
+            font-family: Poppins;
+            font-size: 34px;
+            font-style: normal;
             font-weight: 600;
-            font-size: 30px;
-          }
+            line-height: normal;
 
-          .annually {
-            color: var(--surface-main-primary);
+            & > span {
+              @include typography(footer);
+
+              & {
+                font-weight: 300;
+              }
+            }
           }
         }
 
@@ -148,6 +152,7 @@
           text-wrap: balance;
           box-sizing: border-box;
           padding: 0 20px;
+          margin-bottom: 6px;
         }
 
         & > .action-container {

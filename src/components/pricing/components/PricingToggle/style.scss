@@ -1,0 +1,35 @@
+.pricing-toggle {
+  display: flex;
+  flex-flow: row;
+  row-gap: 8px;
+  box-sizing: border-box;
+  border: 1px solid var(--text-body-primary);
+  border-radius: 50px;
+  min-height: 38px;
+
+  & > button {
+    box-sizing: border-box;
+    background-color: transparent;
+    border: none;
+    padding: 4px 20px;
+    @include typography(paragraph);
+    color: var(--text-body-primary);
+    cursor: pointer;
+
+    &.active {
+      color: var(--text-button-secondary);
+      background-color: var(--surface-main-primary);
+      border-radius: 50px;
+    }
+  }
+
+  &.size-small {
+    min-height: 20px;
+
+    & > button {
+      font-size: 12px;
+      font-weight: 300;
+      padding: 0 10px;
+    }
+  }
+}
