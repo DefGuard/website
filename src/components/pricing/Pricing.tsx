@@ -5,9 +5,9 @@ import { useMemo, useState } from "react";
 import Markdown from "react-markdown";
 import rehypeR from "rehype-raw";
 
-import type { PricingSchema } from "../../content/config";
+import type { PricingSchema } from "../../content.config";
 
-type PricingData = PricingSchema & { content: string; id: string | number };
+type PricingData = PricingSchema & { content: string | undefined; id: string | number };
 
 type PricingProps = {
   data: PricingData[];
@@ -142,9 +142,11 @@ const PricingCard = ({ data, activePlan }: CardProps) => {
       <div className="divider">
         <div className="line" />
       </div>
-      <div className="content-container">
-        <Markdown rehypePlugins={[rehypeR]}>{data.content}</Markdown>
-      </div>
+      {data.content !== undefined && (
+        <div className="content-container">
+          <Markdown rehypePlugins={[rehypeR]}>{data.content}</Markdown>
+        </div>
+      )}
     </div>
   );
 };

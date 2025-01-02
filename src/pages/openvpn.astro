@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { render, getCollection } from "astro:content";
 import Navigation from "../components/base/Navigation.astro";
 import ProductLayout from "../layouts/ProductLayout.astro";
 import ProductSection from "../layouts/ProductSection.astro";
@@ -69,7 +69,7 @@ const tags = [
         <h3>Why migrate from OpenVPN to defguard:</h3>
         {
           openvpnFeatures.map(async (f, index) => {
-            const { Content } = await f.render();
+            const { Content } = await render(f);
             return (
               <ProductFeature title={f.data.title} id={index} context="core" client:load>
                 <Content />

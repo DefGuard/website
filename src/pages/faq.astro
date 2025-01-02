@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import Navigation from "../components/base/Navigation.astro";
 import ProductLayout from "../layouts/ProductLayout.astro";
 import ProductSection from "../layouts/ProductSection.astro";
@@ -63,7 +63,7 @@ const tags = [
       <div class="product-features">
         {
           faqFeatures.map(async (f, index) => {
-            const { Content } = await f.render();
+            const { Content } = await render(f);
             return (
               <ProductFeature title={f.data.title} id={index} context="core" client:load>
                 <Content />

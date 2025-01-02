@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import GithubStars from "../components/GithubStars/GithubStars";
 import Navigation from "../components/base/Navigation.astro";
 import { Button } from "../components/buttons/Button/Button";
@@ -97,7 +97,7 @@ const tags = [
         <h2>Unique set of features combined in a secure architecture:</h2>
         {
           coreFeatures.map(async (f, index) => {
-            const { Content } = await f.render();
+            const { Content } = await render(f);
             return (
               <ProductFeature title={f.data.title} id={index} context="core" client:load>
                 <Content />

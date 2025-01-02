@@ -1,6 +1,6 @@
 ---
 import HomeSection from "../../../../components/home/HomeSection.astro";
-import { getCollection } from "astro:content";
+import { render, getCollection } from "astro:content";
 import RoadmapCard from "./RoadmapCard.astro";
 
 const collection = await getCollection("roadmap");
@@ -32,7 +32,7 @@ const collection = await getCollection("roadmap");
           .sort((a, b) => a.data.version - b.data.version)
           .map(async (collectionItem, index) => {
             const odd = (index + 1) % 2 === 1;
-            const { Content } = await collectionItem.render();
+            const { Content } = await render(collectionItem);
             let style: astroHTML.JSX.CSSProperties;
             if (odd) {
               style = {
