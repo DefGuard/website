@@ -4,6 +4,7 @@
   flex-flow: column;
   align-items: center;
   justify-content: flex-start;
+  position: relative;
 
   & > .plan-notice {
     @include typography(menu);
@@ -14,35 +15,69 @@
     margin-bottom: 40px;
   }
 
-  & > .plans {
+  & > .scroll-container {
     width: 100%;
-    display: grid;
+    max-width: 100%;
+    overflow-x: auto;
 
-    @include break-down(sm) {
-      grid-auto-flow: row;
-      row-gap: 40px;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    & > .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      background-color: transparent;
+      border: none;
+      display: flex;
+      flex-flow: row;
+      align-items: center;
       justify-content: center;
+      cursor: pointer;
 
-      .pricing-card {
-        max-width: 255px;
+      &:focus-visible {
+        outline: none;
+      }
+
+      &.left {
+        left: 0;
+        transform: translateY(-50%) rotateZ(180deg);
+      }
+
+      &.right {
+        right: 0;
       }
     }
 
-    @include break-up(sm) {
-      grid-template-columns: repeat(auto-fit, 255px);
-      column-gap: 25px;
-      row-gap: 25px;
-      justify-content: flex-start;
-    }
+    & > .gradient {
+      height: 100%;
+      width: 100px;
+      position: absolute;
+      top: 0;
 
-    @include break-up(xl) {
-      grid-template-columns: repeat(auto-fit, 255px);
-      justify-content: space-between;
-      column-gap: 25px;
-      row-gap: 25px;
+      &.left {
+        left: 0;
+        background: linear-gradient(270deg, rgba(249, 249, 249, 0) 0%, #f9f9f9 70.5%);
+      }
+
+      &.right {
+        right: 0;
+        background: linear-gradient(90deg, rgba(249, 249, 249, 0) 0%, #f9f9f9 70.5%);
+      }
     }
+  }
+
+  .plans {
+    min-width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    column-gap: 20px;
+    position: relative;
 
     .pricing-card {
+      min-width: 255px;
       box-sizing: border-box;
       border: 1px solid var(--text-body-primary);
 
