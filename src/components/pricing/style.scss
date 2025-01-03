@@ -17,11 +17,17 @@
 
   & > .scroll-container {
     width: 100%;
-    max-width: 100%;
-    overflow-x: auto;
+    position: relative;
+    overflow-y: hidden;
 
-    &::-webkit-scrollbar {
-      display: none;
+    & > .plans {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     & > .arrow {

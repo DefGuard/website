@@ -49,7 +49,6 @@ const PricingArrow = () => {
 };
 
 export const PricingCards = ({ data }: PricingProps) => {
-  const scrollRef = useRef<HTMLDivElement | null>(null);
   const plansRef = useRef<HTMLDivElement | null>(null);
   const frameRef = useRef<number | null>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -64,7 +63,7 @@ export const PricingCards = ({ data }: PricingProps) => {
   const [support, setSupport] = useState(SupportPlan.NO_SUPPORT);
 
   const updateScrollProgress = useCallback(() => {
-    const element = scrollRef.current;
+    const element = plansRef.current;
     if (element) {
       const { scrollLeft, scrollWidth, clientWidth } = element;
       const progress = scrollLeft / (scrollWidth - clientWidth);
@@ -84,7 +83,7 @@ export const PricingCards = ({ data }: PricingProps) => {
   //scroll to next card in given direction
   const handleArrowEvent = useCallback((direction: "left" | "right") => {
     const plans = plansRef.current;
-    const scrollContainer = scrollRef.current;
+    const scrollContainer = plans;
     if (!plans || !scrollContainer) return;
     const scrollRect = scrollContainer.getBoundingClientRect();
     let pricingCards = Array.from(plans.children);
@@ -150,10 +149,10 @@ export const PricingCards = ({ data }: PricingProps) => {
   useEffect(() => {
     // on mount calc the correct state
     handleScrollEvent();
-    scrollRef.current?.addEventListener("scroll", handleScrollEvent);
+    plansRef.current?.addEventListener("scroll", handleScrollEvent);
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      scrollRef.current?.removeEventListener("scroll", handleScrollEvent);
+      plansRef.current?.removeEventListener("scroll", handleScrollEvent);
       if (frameRef.current !== null) {
         cancelAnimationFrame(frameRef.current);
       }
@@ -190,7 +189,7 @@ export const PricingCards = ({ data }: PricingProps) => {
           </span>
         )}
       </p>
-      <div className="scroll-container" ref={scrollRef}>
+      <div className="scroll-container">
         <div className="plans" ref={plansRef}>
           {data.map((pricingData) => (
             <PricingCard
