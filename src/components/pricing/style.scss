@@ -24,6 +24,8 @@
       width: 100%;
       max-width: 100%;
       overflow-x: auto;
+      touch-action: pan-x;
+      cursor: grab;
 
       &::-webkit-scrollbar {
         display: none;
@@ -83,9 +85,10 @@
     position: relative;
 
     .pricing-card {
-      min-width: 255px;
+      min-width: 275px;
       box-sizing: border-box;
       border: 1px solid var(--text-body-primary);
+      user-select: none;
 
       & > * {
         width: 100%;
@@ -101,7 +104,8 @@
         p {
           @include typography(pricebox-title);
           color: var(--text-body-primary);
-          text-wrap: nowrap;
+          text-wrap: balance;
+          text-align: center;
         }
       }
 
@@ -123,7 +127,7 @@
           width: 100%;
 
           &.spaced {
-            padding-bottom: 45px;
+            padding-bottom: 75px;
           }
 
           &.free {

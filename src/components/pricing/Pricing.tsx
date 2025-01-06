@@ -1,6 +1,7 @@
 import "./style.scss";
 import "react-multi-carousel/lib/styles.css";
 
+import { useDrag } from "@use-gesture/react";
 import clsx from "clsx";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Markdown from "react-markdown";
@@ -55,12 +56,22 @@ export const PricingCards = ({ data }: PricingProps) => {
   const [showRightArrow, setShowRightArrow] = useState(false);
   const [showLeftGradient, setShowLeftGradient] = useState(false);
   const [showRightGradient, setShowRightGradient] = useState(false);
-  const annualEnabled = useMemo(
-    () => data.filter((p) => p.annualPrice !== undefined).length > 0,
-    [data],
-  );
+
+  const bind = useDrag(({ delta }) => {
+    const element = plansRef.current;
+    if (element) {
+      element.scrollLeft -= delta[0];
+    }
+  });
 
   const [support, setSupport] = useState(SupportPlan.NO_SUPPORT);
+
+  const pricingData = useMemo(() => {
+    if (support) {
+      return data.filter((d) => d.supported);
+    }
+    return data.filter((d) => !d.supported);
+  }, [data, support]);
 
   const updateScrollProgress = useCallback(() => {
     const element = plansRef.current;
@@ -162,18 +173,16 @@ export const PricingCards = ({ data }: PricingProps) => {
 
   return (
     <div id="pricing-container">
-      {annualEnabled && (
-        <PricingToggle
-          value={support}
-          left={SupportPlan.NO_SUPPORT}
-          right={SupportPlan.SUPPORT}
-          onChange={setSupport}
-          labels={{
-            left: "Without Support",
-            right: "With Support",
-          }}
-        />
-      )}
+      <PricingToggle
+        value={support}
+        left={SupportPlan.NO_SUPPORT}
+        right={SupportPlan.SUPPORT}
+        onChange={setSupport}
+        labels={{
+          left: "Without Support",
+          right: "With Support",
+        }}
+      />
       <p className="plan-notice">
         {support === SupportPlan.SUPPORT && (
           <span>
@@ -190,8 +199,8 @@ export const PricingCards = ({ data }: PricingProps) => {
         )}
       </p>
       <div className="scroll-container">
-        <div className="plans" ref={plansRef}>
-          {data.map((pricingData) => (
+        <div className="plans" ref={plansRef} {...bind()}>
+          {pricingData.map((pricingData) => (
             <PricingCard
               data={pricingData}
               key={pricingData.id}
@@ -231,7 +240,7 @@ type CardProps = {
   support: boolean;
 };
 
-const PricingCard = ({ data, support }: CardProps) => {
+const PricingCard = ({ data }: CardProps) => {
   const [pricingPlan, setPricingPlan] = useState(PricingPlan.MONTHLY);
   const isAnnual = pricingPlan === PricingPlan.ANNUAL && data.annualPrice !== undefined;
 
@@ -260,7 +269,7 @@ const PricingCard = ({ data, support }: CardProps) => {
         <div
           className={clsx("price", {
             free: data.price === 0,
-            spaced: data.price === 0 || !isAnnual,
+            spaced: data.price === 0 || !isAnnual || data.annualPrice === undefined,
           })}
         >
           {data.price > 0 && pricingPlan === PricingPlan.MONTHLY && (
