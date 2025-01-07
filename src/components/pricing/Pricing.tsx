@@ -87,6 +87,13 @@ export const PricingCards = ({ data }: PricingProps) => {
     }
   }, []);
 
+  const centerPlansScroll = useCallback(() => {
+    if (plansRef.current) {
+      plansRef.current.scrollLeft =
+        (plansRef.current.scrollWidth - plansRef.current.clientWidth) / 2;
+    }
+  }, []);
+
   const handleScrollEvent = useCallback(() => {
     frameRef.current = requestAnimationFrame(updateScrollProgress);
   }, [updateScrollProgress]);
@@ -102,7 +109,7 @@ export const PricingCards = ({ data }: PricingProps) => {
     if (direction === "right") {
       pricingCards = pricingCards.reverse();
     }
-    const detectionMargin = 50;
+    const detectionMargin = 60;
     const scrollPadding = 50;
     const scrollContainerRight = scrollRect.right + detectionMargin;
     const scrollContainerLeft = scrollRect.left - detectionMargin;
@@ -158,6 +165,13 @@ export const PricingCards = ({ data }: PricingProps) => {
   }, []);
 
   useEffect(() => {
+    centerPlansScroll();
+    handleScrollEvent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [support]);
+
+  useEffect(() => {
+    centerPlansScroll();
     // on mount calc the correct state
     handleScrollEvent();
     plansRef.current?.addEventListener("scroll", handleScrollEvent);
@@ -169,7 +183,7 @@ export const PricingCards = ({ data }: PricingProps) => {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data]);
 
   return (
     <div id="pricing-container">
