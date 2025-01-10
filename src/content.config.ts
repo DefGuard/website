@@ -73,10 +73,21 @@ const faqCollection = defineCollection({
   schema: faqSchema,
 });
 
+const pricingFaqSchema = z.object({
+  title: z.string(),
+  order: z.number(),
+});
+
+const pricingFaqCollection = defineCollection({
+  loader: glob({ pattern: defaultPattern, base: contentPath("pricing-faq") }),
+  schema: pricingFaqSchema,
+});
+
 export const collections = {
   "client-features": clientFeatures,
   "core-features": coreFeatures,
   "openvpn-features": openvpnFeaturesCollection,
+  "pricing-faq": pricingFaqCollection,
   faq: faqCollection,
   pricing: pricingCollection,
   roadmap: roadmapCollection,

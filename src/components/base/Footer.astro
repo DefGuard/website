@@ -62,6 +62,13 @@ import LogoFull from "/public/svg/logo-full.svg?raw";
     align-items: flex-start;
     justify-content: center;
     background-color: var(--surface-frame-bg);
+    border-top: 1px solid var(--colors-border-separator, #c4c4c4);
+    box-sizing: border-box;
+    padding-top: 50px;
+
+    @include break-up(lg) {
+      padding-top: 100px;
+    }
 
     header {
       display: flex;

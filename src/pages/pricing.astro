@@ -7,8 +7,11 @@ import BookDemoForm from "../components/form/BookDemoForm/BookDemoForm";
 import PricingHeaderContent from "../data/pricing/page-header.mdx";
 import { PricingCards } from "../components/pricing/Pricing";
 import ContentLimiter from "../components/ContentLimiter.astro";
+import { render } from "astro:content";
+import { ProductFeature } from "../components/product/ProductFeature/ProductFeature";
 
 const pricingCollection = await getCollection("pricing");
+const faqCollections = await getCollection("pricing-faq");
 // sort and map to prop type
 const pricingData = pricingCollection
   .filter((p) => !p.data.disabled)
@@ -71,7 +74,7 @@ const tags = [
       <div id="sla-support">
         <div id="sla-card">
           <div class="left">
-            <p>Enterprise<br /><span>SLA Support</span></p>
+            <p>Custom deployment<br />or bespoke features</p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="705"
@@ -102,12 +105,9 @@ const tags = [
             </svg>
           </div>
           <div class="right">
-            <h3>Custom Solution</h3>
             <p>
-              If your needs require special attention, defguard <strong
-                >Enterprise SLA Support</strong
-              >
-              offers more than standard, with added benefits customized to your exact specifications.
+              If you need help with custom deployment or would like to order a bespoke /
+              tailored features - please contact for a quote.
             </p>
             <div class="bottom">
               <a href="mailto:sales@defguard.net">Contact Sales</a>
@@ -115,14 +115,8 @@ const tags = [
           </div>
         </div>
       </div>
-      <div class="product-features">
+      <div class="book-demo-section">
         <div class="form-description">
-          <h3>Looking for custom deployment or features?</h3>
-          <p>
-            We provide consulting or custom deployment and security services. You also can
-            commission us to deliver custom features or integrations (for the server
-            and/or the client). Just fill out the form below.
-          </p>
           <h3>You need an enterprise features for free?</h3>
           <p>
             If you are a: <strong>non profit organization</strong> or <strong
@@ -132,6 +126,28 @@ const tags = [
         </div>
         <BookDemoForm client:load />
       </div>
+      {
+        faqCollections.length > 0 && (
+          <div class="faq">
+            <p>Frequently Asked Questions</p>
+            <div class="items">
+              {faqCollections.map(async (f, index) => {
+                const { Content } = await render(f);
+                return (
+                  <ProductFeature
+                    title={f.data.title}
+                    id={index}
+                    context="pricing-faq"
+                    client:idle
+                  >
+                    <Content />
+                  </ProductFeature>
+                );
+              })}
+            </div>
+          </div>
+        )
+      }
     </ContentLimiter>
   </main>
 
@@ -163,7 +179,7 @@ const tags = [
         @include typography(pricebox-section);
       }
 
-      header {
+      & > header {
         display: flex;
         flex-flow: column;
         justify-content: flex-start;
@@ -252,7 +268,25 @@ const tags = [
         width: 100%;
       }
 
-      .product-features {
+      .faq {
+        padding-bottom: 80px;
+        & > p {
+          @include typography(h3);
+          padding-bottom: 8px;
+        }
+
+        & > .items {
+          display: flex;
+          flex-flow: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          width: 100%;
+          row-gap: 32px;
+        }
+      }
+
+      .book-demo-section {
+        padding-bottom: 80px;
         .form-description {
           width: 100%;
           display: flex;
@@ -310,6 +344,7 @@ const tags = [
             padding-top: 20px;
             padding-left: 20px;
             padding-bottom: 174px;
+            text-wrap: balance;
 
             @include break-up(md) {
               padding-top: 54px;
@@ -329,7 +364,7 @@ const tags = [
           grid-column: 1 / 2;
           grid-row: 2;
           box-sizing: border-box;
-          padding: 20px;
+          padding: 40px 20px;
           display: flex;
           flex-flow: column;
           flex-grow: 1;
