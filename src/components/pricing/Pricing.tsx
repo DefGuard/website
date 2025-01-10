@@ -1,7 +1,7 @@
 import "./style.scss";
 import "react-multi-carousel/lib/styles.css";
 
-import { useDrag } from "@use-gesture/react";
+import { useGesture } from "@use-gesture/react";
 import clsx from "clsx";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Markdown from "react-markdown";
@@ -51,18 +51,30 @@ const PricingArrow = () => {
 
 export const PricingCards = ({ data }: PricingProps) => {
   const plansRef = useRef<HTMLDivElement | null>(null);
-  const frameRef = useRef<number | null>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
   const [showLeftGradient, setShowLeftGradient] = useState(false);
   const [showRightGradient, setShowRightGradient] = useState(false);
 
-  const bind = useDrag(({ delta }) => {
-    const element = plansRef.current;
-    if (element) {
-      element.scrollLeft -= delta[0];
-    }
-  });
+  useGesture(
+    {
+      onDrag: ({ delta }) => {
+        const element = plansRef.current;
+        if (element) {
+          element.scrollLeft -= delta[0];
+        }
+      },
+      onWheel: () => {
+        updateScrollProgress();
+      },
+      onScroll: () => {
+        updateScrollProgress();
+      },
+    },
+    {
+      target: plansRef,
+    },
+  );
 
   const [support, setSupport] = useState(SupportPlan.NO_SUPPORT);
 
@@ -93,10 +105,6 @@ export const PricingCards = ({ data }: PricingProps) => {
         (plansRef.current.scrollWidth - plansRef.current.clientWidth) / 2;
     }
   }, []);
-
-  const handleScrollEvent = useCallback(() => {
-    frameRef.current = requestAnimationFrame(updateScrollProgress);
-  }, [updateScrollProgress]);
 
   //scroll to next card in given direction
   const handleArrowEvent = useCallback((direction: "left" | "right") => {
@@ -165,22 +173,13 @@ export const PricingCards = ({ data }: PricingProps) => {
 
   useEffect(() => {
     centerPlansScroll();
-    handleScrollEvent();
+    updateScrollProgress();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [support]);
 
   useEffect(() => {
     centerPlansScroll();
-    // on mount calc the correct state
-    handleScrollEvent();
-    plansRef.current?.addEventListener("scroll", handleScrollEvent);
-    return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      plansRef.current?.removeEventListener("scroll", handleScrollEvent);
-      if (frameRef.current !== null) {
-        cancelAnimationFrame(frameRef.current);
-      }
-    };
+    updateScrollProgress();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
@@ -212,7 +211,7 @@ export const PricingCards = ({ data }: PricingProps) => {
         )}
       </p>
       <div className="scroll-container">
-        <div className="plans" ref={plansRef} {...bind()}>
+        <div className="plans" ref={plansRef}>
           {pricingData.map((pricingData) => (
             <PricingCard
               data={pricingData}
