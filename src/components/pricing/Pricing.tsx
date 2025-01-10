@@ -28,7 +28,7 @@ enum SupportPlan {
 
 const startThreshold = 0.0;
 
-const endThreshold = 0.95;
+const endThreshold = 1;
 
 const PricingArrow = () => {
   return (
@@ -109,10 +109,9 @@ export const PricingCards = ({ data }: PricingProps) => {
     if (direction === "right") {
       pricingCards = pricingCards.reverse();
     }
-    const detectionMargin = 60;
     const scrollPadding = 50;
-    const scrollContainerRight = scrollRect.right + detectionMargin;
-    const scrollContainerLeft = scrollRect.left - detectionMargin;
+    const scrollContainerRight = scrollRect.right;
+    const scrollContainerLeft = scrollRect.left;
     if (direction === "right") {
       for (const card of pricingCards) {
         const cardRect = card.getBoundingClientRect();
