@@ -131,19 +131,21 @@ const tags = [
           <div class="faq">
             <p>Frequently Asked Questions</p>
             <div class="items">
-              {faqCollections.map(async (f, index) => {
-                const { Content } = await render(f);
-                return (
-                  <ProductFeature
-                    title={f.data.title}
-                    id={index}
-                    context="pricing-faq"
-                    client:idle
-                  >
-                    <Content />
-                  </ProductFeature>
-                );
-              })}
+              {faqCollections
+                .sort((a, b) => a.data.order - b.data.order)
+                .map(async (f, index) => {
+                  const { Content } = await render(f);
+                  return (
+                    <ProductFeature
+                      title={f.data.title}
+                      id={index}
+                      context="pricing-faq"
+                      client:idle
+                    >
+                      <Content />
+                    </ProductFeature>
+                  );
+                })}
             </div>
           </div>
         )
